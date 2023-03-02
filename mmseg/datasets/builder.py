@@ -131,7 +131,7 @@ def build_dataloader(dataset,
     """
     rank, world_size = get_dist_info()
     if dist and isinstance(dataset, MyTrainSet):
-        sampler = DistributedSamplerWrapper(dataset.pruning_sampler(),word_size,rand,shuffle=False)
+        sampler = DistributedSamplerWrapper(dataset.pruning_sampler(),world_size,rand,shuffle=False)
         shuffle = False
         batch_size = samples_per_gpu
         num_workers = workers_per_gpu
