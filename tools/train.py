@@ -19,7 +19,7 @@ from mmseg.datasets import build_dataset
 from mmseg.models import build_segmentor
 from mmseg.utils import (collect_env, get_device, get_root_logger,
                          setup_multi_processes)
-
+from infobatch import *
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a segmentor')
@@ -228,6 +228,9 @@ def main():
     model.CLASSES = datasets[0].CLASSES
     # passing checkpoint meta for saving best checkpoint
     meta.update(cfg.checkpoint_config.meta)
+
+    datasets[0] = [MyTrainSet(datasets[0])]
+
     train_segmentor(
         model,
         datasets,

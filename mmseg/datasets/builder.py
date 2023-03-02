@@ -12,6 +12,7 @@ from mmcv.utils import Registry, build_from_cfg, digit_version
 from torch.utils.data import DataLoader, IterableDataset
 
 from .samplers import DistributedSampler
+from infobatch import *
 
 if platform.system() != 'Windows':
     # https://github.com/pytorch/pytorch/issues/973
@@ -129,7 +130,12 @@ def build_dataloader(dataset,
         DataLoader: A PyTorch dataloader.
     """
     rank, world_size = get_dist_info()
-    if dist and not isinstance(dataset, IterableDataset):
+    if dist and isinstance(dataset, MyTrainSet):
+        sampler = DistributedSamplerWrapper(train_dataset.pruning_sampler(),word_size,rand,shuffle=False)
+        shuffle = False
+        batch_size = samples_per_gpu
+        num_workers = workers_per_gpu
+    elif dist and not isinstance(dataset, IterableDataset):
         sampler = DistributedSampler(
             dataset, world_size, rank, shuffle=shuffle, seed=seed)
         shuffle = False
