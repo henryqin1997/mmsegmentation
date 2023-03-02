@@ -28,7 +28,6 @@ class MyTrainSet(Dataset):
             logger.info("initializing mydataset")
         self.scores = np.ones([len(self.dataset)])
         self.class_samples = defaultdict(list)
-        self.transform = dataset.transform
         self.weights = np.ones(len(self.dataset))
         self.save_num = 0
         self.total_time = 0
