@@ -229,7 +229,7 @@ def main():
     # passing checkpoint meta for saving best checkpoint
     meta.update(cfg.checkpoint_config.meta)
 
-    datasets[0] = [MyTrainSet(datasets[0])]
+#     datasets[0] = [MyTrainSet(datasets[0])]
 
     train_segmentor(
         model,
