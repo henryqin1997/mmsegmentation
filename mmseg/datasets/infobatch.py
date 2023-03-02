@@ -42,9 +42,9 @@ class MyTrainSet(Dataset):
         return len(self.dataset)
 
     def __getitem__(self, index):
-        data, target = self.dataset[index]
+        data= self.dataset[index]
         weight = self.weights[index]
-        return data, target, index, weight
+        return data, index, weight
 
     def prune(self):
         # prune samples that are well learned, rebalence the weight by scaling up remaining
