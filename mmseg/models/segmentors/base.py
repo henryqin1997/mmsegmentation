@@ -147,12 +147,12 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
         loss_ce_persample = torch.mean(torch.mean(losses['decode.loss_ce'],dim=-1),dim=-1)
         aux_ce_persample = torch.mean(torch.mean(losses['aux.loss_ce'],dim=-1),dim=-1)
 
-        print(loss_ce_persample,aux_ce_persample)
+        print(loss_ce_persample, aux_ce_persample)
 
         with torch.no_grad():
             if mytrainset is not None:
                 scores = loss_ce_persample + aux_ce_persample
-                if dist.is_available() and dist.is_initialized()::
+                if dist.is_available() and dist.is_initialized():
                     low,high = split_index(indices)
                     low,high = low.cuda(),high.cuda()
                     tuple = torch.stack([low,high,scores])
