@@ -145,7 +145,6 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
 
         print(kwargs)
 
-        exit(0)
         loss, log_vars = self._parse_losses(losses)
 
         outputs = dict(
