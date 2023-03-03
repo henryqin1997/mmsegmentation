@@ -20,7 +20,7 @@ from operator import itemgetter
 from typing import Iterator, List, Optional, Union
 
 class MyTrainSet(Dataset):
-    def __init__(self, dataset, class_num = None, logger = None, ratio = None):
+    def __init__(self, dataset, total_steps = None, class_num = None, logger = None, ratio = 0.5):
         self.dataset = dataset
         self.class_num = class_num
         self.logger = logger
@@ -32,6 +32,7 @@ class MyTrainSet(Dataset):
         self.save_num = 0
         self.total_time = 0
         self.ratio = ratio
+        self.total_steps = total_steps
         if logger is not None:
             logger.info("initialized mydataset")
 
@@ -42,7 +43,7 @@ class MyTrainSet(Dataset):
         return len(self.dataset)
 
     def __getitem__(self, index):
-        data= self.dataset[index]
+        data = self.dataset[index]
         weight = self.weights[index]
         return data, index, weight
 
@@ -73,7 +74,7 @@ class MyTrainSet(Dataset):
         return pruned_samples
 
     def pruning_sampler(self):
-        return MyIterator(self.prune, initial_len=len(self.dataset))
+        return MyIterator(self.prune, initial_len=len(self.dataset), func2=self.no_cut, total_steps=self.total_steps)
 
     def total_time_cost(self):
         return self.total_time
@@ -99,23 +100,30 @@ class MyTrainSet(Dataset):
         self.weights = np.ones(len(self.dataset))
 
 class MyIterator():
-    def __init__(self, func, initial_len = 0):
+    def __init__(self, func, initial_len = 0, func2=None, total_steps=None):
         self.func = func
+        self.func2 = func2
+        self.total_steps = total_steps
         self.seq = None
         self.initial_len = initial_len
         self.seed = 0
+        self.current_step = 0
         self.reset()
 
     def reset(self):
         np.random.seed(self.seed)
+        if self.total_steps is not None and self.func2 is not None and self.current_step>=int(0.85*self.total_steps):
+            self.seq = self.func2()
+        else:
+            self.seq = self.func()
         self.seed+=1
-        self.seq = self.func()
         self.ite = iter(self.seq)
         self.new_length = len(self.seq)
 
     def __next__(self):
         try:
             nxt = next(self.ite)
+            self.current_step+=1
             return nxt
         except StopIteration:
             self.reset()
