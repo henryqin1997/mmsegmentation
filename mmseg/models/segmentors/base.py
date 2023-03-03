@@ -139,7 +139,7 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
         #Modified here to adapt infobatch input
         if isinstance(data_batch,list):
             data_batch,indices,weights  = data_batch
-            if 'mytrainset' is in kwargs:
+            if 'mytrainset' in kwargs:
                 mytrainset = kwargs['mytrainset']
             else:
                 mytrainset = None
