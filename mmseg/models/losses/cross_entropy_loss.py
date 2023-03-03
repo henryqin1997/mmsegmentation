@@ -89,7 +89,7 @@ def _expand_onehot_labels(labels, label_weights, target_shape, ignore_index):
 def binary_cross_entropy(pred,
                          label,
                          weight=None,
-                         reduction='mean',
+                         reduction='none',
                          avg_factor=None,
                          class_weight=None,
                          ignore_index=-100,
