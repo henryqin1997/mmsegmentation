@@ -138,8 +138,8 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
 #         if isinstance(data_batch,list):
 #             losses = self(**data_batch[0])
 #         else:
-        print(data_batch)
-        losses = self(**data_batch[0])
+        print(data_batch[0])
+        losses = self(**(data_batch[0]))
 
         print(losses)
 
