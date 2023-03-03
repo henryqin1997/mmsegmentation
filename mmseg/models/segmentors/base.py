@@ -141,6 +141,8 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
 
         losses = self(**data_batch)
 
+        print(losses)
+
         print(kwargs)
 
         loss, log_vars = self._parse_losses(losses)
