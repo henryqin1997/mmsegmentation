@@ -8,6 +8,7 @@ import numpy as np
 import torch
 import torch.distributed as dist
 from mmcv.runner import BaseModule, auto_fp16
+from tools.infobatch import *
 
 
 class BaseSegmentor(BaseModule, metaclass=ABCMeta):
@@ -137,13 +138,33 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
         """
         #Modified here to adapt infobatch input
         if isinstance(data_batch,list):
-            data_batch,indexes,weights  = data_batch
+            data_batch,indices,weights  = data_batch
 
         losses = self(**data_batch)
 
         print(losses)
+        #calculate persample score
+        loss_ce_persample = torch.mean(torch.mean(losses['decode.loss_ce'],dim=-1),dim=-1)
+        aux_ce_persample = torch.mean(torch.mean(losses['aux.loss_ce'],dim=-1),dim=-1)
 
-        print(kwargs)
+        print(loss_ce_persample,aux_ce_persample)
+
+        with torch.no_grad():
+            if mytrainset is not None:
+                scores = loss_ce_persample + aux_ce_persample
+                if dist.is_available() and dist.is_initialized()::
+                    low,high = split_index(indices)
+                    low,high = low.cuda(),high.cuda()
+                    tuple = torch.stack([low,high,scores])
+                    tuple_all = concat_all_gather(tuple, dim=1)
+                    low_all, high_all, scores_all = tuple_all[0].type(torch.int), tuple_all[1].type(torch.int), tuple_all[2]
+                    indices_all = recombine_index(low_all,high_all)
+                    mytrainset.__setscore__(indices_all.detach().cpu().numpy(), scores_all.detach().cpu().numpy())
+                else:
+                    mytrainset.__setscore__(indices.detach().cpu().numpy(), scores.detach().cpu().numpy())
+
+        losses['decode.loss_ce'] = (loss_ce_persample * weights).mean()
+        losses['aux.loss_ce'] = (aux_ce_persample * weights).mean()
 
         loss, log_vars = self._parse_losses(losses)
 

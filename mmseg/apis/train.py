@@ -192,10 +192,4 @@ def train_segmentor(model,
     elif cfg.load_from:
         runner.load_checkpoint(cfg.load_from)
 
-#     print(dataset,type(dataset[0]))
-
-#     if isinstance(dataset[0],MyTrainSet):
-#         print("Using infobatch")
     runner.run(data_loaders, cfg.workflow, mytrainset = dataset[0])
-#     else:
-#         runner.run(data_loaders, cfg.workflow)
