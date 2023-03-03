@@ -238,6 +238,7 @@ def main():
         validate=(not args.no_validate),
         timestamp=timestamp,
         meta=meta)
+    print(datasets[0].total_save())
 
 
 if __name__ == '__main__':
