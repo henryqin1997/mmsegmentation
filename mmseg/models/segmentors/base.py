@@ -146,12 +146,12 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
 
         losses = self(**data_batch)
 
-        print(losses)
+#         print(losses)
         #calculate persample score
         loss_ce_persample = torch.mean(torch.mean(losses['decode.loss_ce'],dim=-1),dim=-1)
         aux_ce_persample = torch.mean(torch.mean(losses['aux.loss_ce'],dim=-1),dim=-1)
 
-        print(loss_ce_persample, aux_ce_persample)
+#         print(loss_ce_persample, aux_ce_persample)
 
         with torch.no_grad():
             if mytrainset is not None:
