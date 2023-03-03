@@ -16,7 +16,7 @@ from mmseg.core import DistEvalHook, EvalHook, build_optimizer
 from mmseg.datasets import build_dataloader, build_dataset
 from mmseg.utils import (build_ddp, build_dp, find_latest_checkpoint,
                          get_root_logger)
-
+from tools.infobatch import MyTrainSet
 
 def init_random_seed(seed=None, device='cuda'):
     """Initialize random seed.
@@ -191,4 +191,7 @@ def train_segmentor(model,
         runner.resume(cfg.resume_from)
     elif cfg.load_from:
         runner.load_checkpoint(cfg.load_from)
-    runner.run(data_loaders, cfg.workflow)
+    if isinstance(dataset[0],MyTrainSet):
+        runner.run(data_loaders, cfg.workflow, mytrainset = dataset[0])
+    else:
+        runner.run(data_loaders, cfg.workflow)

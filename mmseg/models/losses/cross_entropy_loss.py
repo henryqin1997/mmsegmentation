@@ -13,7 +13,7 @@ def cross_entropy(pred,
                   label,
                   weight=None,
                   class_weight=None,
-                  reduction='none',
+                  reduction='mean',
                   avg_factor=None,
                   ignore_index=-100,
                   avg_non_ignore=False):
