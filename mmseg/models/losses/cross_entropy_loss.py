@@ -218,7 +218,7 @@ class CrossEntropyLoss(nn.Module):
     def __init__(self,
                  use_sigmoid=False,
                  use_mask=False,
-                 reduction='mean',
+                 reduction='none',
                  class_weight=None,
                  loss_weight=1.0,
                  loss_name='loss_ce',
