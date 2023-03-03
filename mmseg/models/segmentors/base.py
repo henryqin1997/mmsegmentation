@@ -139,7 +139,7 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
 #             losses = self(**data_batch[0])
 #         else:
         print(data_batch)
-        losses = self(**data_batch)
+        losses = self(**data_batch[0])
 
         print(losses)
 
