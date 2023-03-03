@@ -135,11 +135,11 @@ class BaseSegmentor(BaseModule, metaclass=ABCMeta):
                 DDP, it means the batch size on each GPU), which is used for
                 averaging the logs.
         """
-#         if isinstance(data_batch,list):
-#             losses = self(**data_batch[0])
-#         else:
-        print(data_batch[0])
-        losses = self(**(data_batch[0]))
+        #Modified here to adapt infobatch input
+        if isinstance(data_batch,list):
+            data_batch,indexes,weights  = data_batch
+
+        losses = self(**data_batch)
 
         print(losses)
 
