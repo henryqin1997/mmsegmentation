@@ -19,7 +19,9 @@ from mmseg.datasets import build_dataset
 from mmseg.models import build_segmentor
 from mmseg.utils import (collect_env, get_device, get_root_logger,
                          setup_multi_processes)
-from infobatch import *
+# from infobatch import *
+from infobatch_quantile import *
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a segmentor')
@@ -91,6 +93,10 @@ def parse_args():
         '--auto-resume',
         action='store_true',
         help='resume from the latest checkpoint automatically.')
+    parser.add_argument('--ratio',default=[0.25,0.5],nargs='+', type=float)
+    parser.add_argument('--quantile',default=[20,85],nargs='+', type=int)
+    parser.add_argument('--delta',default=0.875,type=float)
+
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -228,7 +234,7 @@ def main():
     model.CLASSES = datasets[0].CLASSES
     # passing checkpoint meta for saving best checkpoint
     meta.update(cfg.checkpoint_config.meta)
-    datasets[0] = MyTrainSet(datasets[0],cfg.runner.max_iters)
+    datasets[0] = MyTrainSet(datasets[0],total_steps=cfg.runner.max_iters,ratio=args.ratio, delta=args.delta, quantiles=args.quantile)
 
     train_segmentor(
         model,
