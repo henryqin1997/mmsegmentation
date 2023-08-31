@@ -11,7 +11,6 @@ class MyTrainSet(Dataset):
         self.num_epoch = num_epoch
         self.delta = delta
         self.scores = np.ones([len(self.dataset)])
-        self.transform = dataset.transform
         self.weights = np.ones(len(self.dataset))
         self.save_num = 0
         self.quantiles = quantiles
