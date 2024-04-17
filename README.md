@@ -26,6 +26,7 @@ For other network structures, please update corresponding config and be noted th
 Contact authors of InfoBatch if need further help; also refer to newest version of InfoBatch code which doesn't rely on
 manually rewrite the data loading and the whole forward loop.
 
+Below is the original repo's readme.
 
 ----
 <div align="center">
