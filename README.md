@@ -1,3 +1,26 @@
+#InfoBatch Adaption Of UperNet Segmentation Task
+Research version of InfoBatch on mmsegmentation.
+
+To test the 40% acceleration of InfoBatch (quantile version) on UperNet semantic segmentation, run 
+```
+tools/dist_train.sh configs/upernet/upernet_r50_512x512_64k_ade20k.py 8
+```
+
+To switch InfoBatch version to mean based threshold, change the import in tools/train.py:
+```
+# from infobatch import *
+from infobatch_quantile import *
+```
+to
+```
+from infobatch import *
+# from infobatch_quantile import *
+```
+
+For other network structures, please update corresponding config and be noted that they are not fully tested yet.
+Contact authors of InfoBatch if need further help; also refer to newest version of InfoBatch code which doesn't rely on
+manually rewrite the data loading and the whole forward loop.
+----
 <div align="center">
   <img src="resources/mmseg-logo.png" width="600"/>
   <div>&nbsp;</div>
