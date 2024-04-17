@@ -1,4 +1,5 @@
 #InfoBatch Adaption Of UperNet Segmentation Task
+
 Research version of InfoBatch on mmsegmentation.
 
 To test the 40% acceleration of InfoBatch (quantile version) on UperNet semantic segmentation, run 
