@@ -1,4 +1,4 @@
-#InfoBatch Adaption Of UperNet Segmentation Task
+# InfoBatch Adaption Of UperNet Segmentation Task
 
 Research version of InfoBatch on mmsegmentation.
 
