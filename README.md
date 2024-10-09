@@ -5,7 +5,7 @@ Research version of InfoBatch on mmsegmentation.
 To test the 40% acceleration of InfoBatch (quantile version) on UperNet semantic segmentation, run 
 
 ```
-tools/dist_train.sh configs/upernet/upernet_r50_512x512_64k_ade20k.py 8
+PORT=12348 CUDA_VISIBLE_DEVICES=4,5,6,7 tools/dist_train.sh configs/upernet/upernet_r50_512x512_48k_ade20k.py 4
 ```
 
 To switch InfoBatch version to mean based threshold, change the import in tools/train.py:
